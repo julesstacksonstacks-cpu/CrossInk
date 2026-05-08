@@ -546,3 +546,26 @@ void saveSettings(const CrossPointSettings& settings)
 
     file.close();
 }
+void loadSettings(CrossPointSettings& settings)
+{
+    File file = SPIFFS.open("/settings.json", "r");
+
+    if(!file)
+        return;
+
+    JsonDocument doc;
+
+    deserializeJson(doc, file);
+
+    settings.wifiEnabled =
+        doc["wifiEnabled"] | true;
+
+    // Add this
+    settings.bluetoothEnabled =
+        doc["bluetoothEnabled"] | false;
+
+    settings.brightness =
+        doc["brightness"] | 100;
+
+    file.close();
+}
