@@ -679,3 +679,4 @@ src/
 ├── CrossPointSettings.cpp
 ├── CrossPointSettings.h
 └── main.cpp
+  settings.bluetoothEnabled
