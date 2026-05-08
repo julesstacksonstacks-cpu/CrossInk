@@ -1,0 +1,13 @@
+git clone https://github.com/YOUR_USERNAME/CrossInk.git
+cd CrossInk
+git checkout -b feature/bluetooth-le
+
+# Create the 4 new files with code from above
+mkdir -p lib/BluetoothManager
+# paste all the code I provided earlier
+
+# Edit the 4 existing files (platformio.ini, CrossPointSettings.h, main.cpp, SettingsActivity.cpp)
+
+git add .
+git commit -m "Add Bluetooth LE support with UI toggle"
+git push origin feature/bluetooth-le
