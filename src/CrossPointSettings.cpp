@@ -526,3 +526,23 @@ int CrossPointSettings::getReaderFontId() const {
       }
   }
 }
+#include "CrossPointSettings.h"
+#include <ArduinoJson.h>
+
+void saveSettings(const CrossPointSettings& settings)
+{
+    JsonDocument doc;
+
+    doc["wifiEnabled"] = settings.wifiEnabled;
+
+    // Add this
+    doc["bluetoothEnabled"] = settings.bluetoothEnabled;
+
+    doc["brightness"] = settings.brightness;
+
+    File file = SPIFFS.open("/settings.json", "w");
+
+    serializeJson(doc, file);
+
+    file.close();
+}
