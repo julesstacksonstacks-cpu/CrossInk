@@ -569,3 +569,113 @@ void loadSettings(CrossPointSettings& settings)
 
     file.close();
 }
+src/bluetooth/BluetoothManager.h
+src/bluetooth/BluetoothManager.cpp
+  #pragma once
+
+class BluetoothManager
+{
+public:
+    static void begin();
+    static void stop();
+};
+#include "BluetoothManager.h"
+#include <NimBLEDevice.h>
+
+void BluetoothManager::begin()
+{
+    NimBLEDevice::init("CrossInkBLE");
+
+    Serial.println("Bluetooth started");
+}
+
+void BluetoothManager::stop()
+{
+    NimBLEDevice::deinit(true);
+
+    Serial.println("Bluetooth stopped");
+}
+#include "CrossPointSettings.h"
+#include "bluetooth/BluetoothManager.h"
+
+CrossPointSettings settings;
+
+void setup()
+{
+    Serial.begin(115200);
+
+    loadSettings(settings);
+
+    if(settings.bluetoothEnabled)
+    {
+        BluetoothManager::begin();
+    }
+}
+void toggleBluetooth()
+{
+    settings.bluetoothEnabled =
+        !settings.bluetoothEnabled;
+
+    saveSettings(settings);
+
+    if(settings.bluetoothEnabled)
+    {
+        BluetoothManager::begin();
+    }
+    else
+    {
+        BluetoothManager::stop();
+    }
+}
+void drawSettingsMenu()
+{
+    display.println("WiFi");
+
+    display.println(
+        settings.wifiEnabled ? "ON" : "OFF"
+    );
+
+    display.println("Bluetooth");
+
+    display.println(
+        settings.bluetoothEnabled ? "ON" : "OFF"
+    );
+}
+src/bluetooth/BLEHIDRemote.cpp
+
+#include <BleKeyboard.h>
+
+BleKeyboard bleKeyboard("CrossInkBLE");
+
+void checkRemote()
+{
+    if(bleKeyboard.isConnected())
+    {
+        // Example test
+    }
+}
+void handleRemoteKey(uint8_t key)
+{
+    switch(key)
+    {
+        case KEY_RIGHT:
+        case KEY_PAGEDOWN:
+            nextPage();
+            break;
+
+        case KEY_LEFT:
+        case KEY_PAGEUP:
+            prevPage();
+            break;
+    }
+}
+src/
+├── bluetooth/
+│   ├── BluetoothManager.cpp
+│   ├── BluetoothManager.h
+│   ├── BLEHIDRemote.cpp
+│   └── BLEHIDRemote.h
+│
+├── CrossPointSettings.cpp
+├── CrossPointSettings.h
+└── main.cpp
